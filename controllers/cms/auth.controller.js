@@ -96,7 +96,6 @@ module.exports.refreshToken =  async (req, res) => {
  */
 module.exports.getUserById = async (req , res) =>{
   const token = req.header('Authorization').replace('Bearer ', '');
-  console.log(token);
   jwt.verify(token, process.env.SESSION_TOKEN_SECRET, async (err, decoded) =>{
     if(err){
       res.status(404).send('User Not Found!');

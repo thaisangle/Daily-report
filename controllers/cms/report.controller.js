@@ -6,6 +6,7 @@ const parsetimereport = require('../../helper/parse/report')
 const until = require('../../helper/utils')
 const { request } = require('express');
 const isImage = require('is-image');
+const { findById, findOne } = require('../../models/question');
 /**
  * get create question 
  */
@@ -41,3 +42,7 @@ exports.creater = async (req,res) =>{
         
     // }
 } 
+// exports.getListReport = async(req,res) =>{
+//     // const listReport = Report.find({}).toArray();
+//     console.log("ss");
+// }
