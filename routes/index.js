@@ -2,24 +2,34 @@ const express = require("express");
 const router = express.Router();
 const fs = require("fs");
 const routesPath = `${__dirname}/`;
-const { removeExtensionFromFile } = require("../middlewares/utils");
+const { removeExtensionFromFile } = require("../helper/utils");
 
 /*
  * Load routes statically and/or dynamically
  */
 
-// Load Auth route
-router.use("/auth", require("./auth"));
+// Load Auth API
+router.use("/auth", require("./auth/authen"));
+
+//test dữ liệu
+router.use("/user", require("./api/user"));
+router.use("/setting",require("./api/setting"))
+router.use("/report",require("./api/report"))
+router.use("/question",require("./api/question"))
+router.use("/answer",require("./api/answer"))
+
+
+
 
 // Loop routes path and loads every file as a route except this file and Auth route
-fs.readdirSync(routesPath).filter((file) => {
-  // Take filename and remove last part (extension)
-  const routeFile = removeExtensionFromFile(file);
-  // Prevents loading of this file and auth file
-  return routeFile !== "index" && routeFile !== "auth"
-    ? router.use(`/${routeFile}`, require(`./${routeFile}`))
-    : "";
-});
+// fs.readdirSync(routesPath).filter((file) => {
+//   // Take filename and remove last part (extension)
+//   const routeFile = removeExtensionFromFile(file);
+//   // Prevents loading of this file and auth file
+//   return routeFile !== "index" && routeFile !== "auth"
+//     ? router.use(`/${routeFile}`, require(`./${routeFile}`))
+//     : "";
+// });
 
 /*
  * Setup routes for index

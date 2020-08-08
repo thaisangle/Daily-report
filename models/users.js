@@ -23,21 +23,8 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: true
     },
-    // roles for user
-    role: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Roles',
-      enum: ['user', 'admin']
-    },
-    phoneNumber: {
-      type: String
-    },
-    birthDay: {
-      type: Date
-    },
-    gender: {
+    avatar:{
       type: String,
-      enum: ['Male', 'Female']
     }
   },
   {

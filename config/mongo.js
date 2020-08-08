@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 // const DB_URL = process.env.MONGO_URI
 const loadModels = require('../models')
-const createRolesDB = require('../models/roles.data')
+// const createRolesDB = require('../models/roles.data')
 
 module.exports = () => {
     const connect = () => {
@@ -40,5 +40,5 @@ module.exports = () => {
       mongoose.connection.on('disconnected', connect)
     
       loadModels()
-      createRolesDB()
+      // createRolesDB()
 }
