@@ -1,6 +1,6 @@
 var express = require("express");
 var router = express.Router();
-var controller = require("../../controllers/cms/auth.controller")
+var controller = require("../../controllers/api/auth.controller")
 var bodyParser = require("body-parser");
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 

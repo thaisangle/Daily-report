@@ -2,7 +2,7 @@ const dotenv = require('dotenv');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
-var tokenList = {};
+var token_list = {};
 const utils = require('../../middlewares/authentication/until');
 
 const User = require('../../models/users');
@@ -29,15 +29,15 @@ module.exports.login = async(req,res) => {
                             expiresIn: 900
                           });
                           // Tạo một mã token khác - Refresh token
-                        const refreshToken = jwt.sign({_user}, process.env.REFRESH_TOKEN_SECRET, {
+                        const refresh_token = jwt.sign({_user}, process.env.REFRESH_TOKEN_SECRET, {
                             expiresIn: 900
                         });
                          // Lưu lại mã Refresh token, kèm thông tin của user để sau này sử dụng lại
-                        tokenList[refreshToken] = _user;
+                        token_list[refresh_token] = _user;
                         // Trả lại cho user thông tin mã token kèm theo mã Refresh token
                         const response = {
                             access_token,
-                            refreshToken,
+                            refresh_token,
                         }
 
                         res.json({response});
@@ -59,16 +59,16 @@ module.exports.login = async(req,res) => {
  */
 module.exports.refreshToken =  async (req, res) => {
     // User gửi mã Refresh token kèm theo trong body
-    const { refreshToken } = req.body;
+    const { refresh_token } = req.body;
     
     // Kiểm tra Refresh token có được gửi kèm và mã này có tồn tại trên hệ thống hay không
-    if ((refreshToken) && (refreshToken in tokenList)) {
+    if ((refresh_token) && (refresh_token in token_list)) {
       try {
         // Kiểm tra mã Refresh token
         // console.log(process.env.REFRESH_TOKEN_SECRET);
-         await utils.verifyJwtToken(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+         await utils.verifyJwtToken(refresh_token, process.env.REFRESH_TOKEN_SECRET);
          // Lấy lại thông tin user
-        const _user = tokenList[refreshToken];
+        const _user = token_list[refresh_token];
         // Tạo mới mã token và trả lại cho user
         const access_token = jwt.sign({_user}, process.env.SESSION_TOKEN_SECRET, {
             expiresIn: 900
@@ -102,7 +102,13 @@ module.exports.getUserById = async (req , res) =>{
     }
     const user=  await User.findOne({ _id: decoded._user.id});
     if(user){
-      res.status(200).json(user);
+      const _user = new User({
+        _id : user._id,
+        name: user.name,
+        email:user.email,
+        avatar:user.avatar
+      })
+      res.status(200).json(_user);
     }
     else{
       res.status(404).send(json("error","User Not Found!"));
@@ -121,7 +127,7 @@ module.exports.getUserById = async (req , res) =>{
 //         const token = req.header('Authorization').replace('Bearer ', '')
 
 //         res.json(token);
-//         // const a = await utils.verifyJwtToken(tokenList, process.env.REFRESH_TOKEN_SECRET);
+//         // const a = await utils.verifyJwtToken(token_list, process.env.REFRESH_TOKEN_SECRET);
 //         // console.log(a); 
         
 //     } catch (error) {

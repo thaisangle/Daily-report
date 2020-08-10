@@ -4,7 +4,7 @@ const passport = require("passport");
 
 // const validate = require("../controllers/auth.validate");
 const trimRequest = require("trim-request");
-const controller = require("../../controllers/cms/answer.controller");
+const controller = require("../../controllers/api/answer.controller");
 
 /**
  * Register route

@@ -6,7 +6,7 @@ const requireAuth = passport.authenticate("jwt", {
 });
 // const validate = require("../controllers/auth.validate");
 const trimRequest = require("trim-request");
-const controller = require("../../controllers/cms/question.controller");
+const controller = require("../../controllers/api/question.controller");
 
 /**
  * Register route

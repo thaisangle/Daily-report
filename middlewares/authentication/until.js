@@ -7,7 +7,7 @@ module.exports = {
         if (err) {
           return reject(err);
         }
-        console.log(decoded);
+        // console.log(decoded);
         resolve(decoded);
       });
     });
