@@ -7,6 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "cross-env NODE_ENV=development nodemon server.js"
   },
+  "engines":{
+    "node": "12.13.x"
+  },
   "author": "Dung Dang",
   "license": "ISC",
   "dependencies": {
