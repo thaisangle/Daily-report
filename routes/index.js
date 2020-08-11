@@ -3,6 +3,7 @@ const router = express.Router();
 const fs = require("fs");
 const routesPath = `${__dirname}/`;
 const { removeExtensionFromFile } = require("../helper/utils");
+const authorization = require('../middlewares/authentication/authorization');
 
 /*
  * Load routes statically and/or dynamically
@@ -12,11 +13,11 @@ const { removeExtensionFromFile } = require("../helper/utils");
 router.use("/auth", require("./auth/authen"));
 
 //test dữ liệu
-router.use("/user", require("./api/user"));
-router.use("/setting",require("./api/setting"))
-router.use("/report",require("./api/report"))
-router.use("/question",require("./api/question"))
-router.use("/answer",require("./api/answer"))
+router.use("/user", authorization(),require("./api/user"));
+router.use("/setting",authorization(),require("./api/setting"))
+router.use("/report",authorization(),require("./api/report"))
+router.use("/question",authorization(),require("./api/question"))
+router.use("/answer",authorization(),require("./api/answer"))
 
 
 

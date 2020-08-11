@@ -15,5 +15,5 @@ router.post(
   "/register",
   controller.create
 );
-router.get("/listQuestion",controller.list_report)
+router.get("/list_question",controller.list_report)
 module.exports = router;
