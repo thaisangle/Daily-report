@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const User = require("../../models/users");
+const bcrypt = require('bcryptjs');
 
 const utils = require("../../helper/utils");
 const auth = require("../../helper/auth");
@@ -19,25 +20,20 @@ const { to, ReE, ReS } = require("../../services/util.service");
  */
 
 exports.crearte = async (req, res, next) => {
-  try {
-    // const typeRoles = await Role.find({});
-    // const typeUser = await typeRoles.find(
-    //   (roleUser) => roleUser.name === ROLE_USER_NAME
-    // );
-    
-    // createUser()
-    const user = await new User({
-      name: req.body.name,
-      email: req.body.email,
-      password: req.body.password,
-      avatar: "123.jpg",
-    });
-  
+    try {
+      // Store hash in your password DB.
+      const user = await  new User({
+        name: req.body.name,
+        email: req.body.email,
+        password: req.body.password,
+        avatar: req.body.avatar,
+      });
       await emailer.emailExists(req.body.email);
-      const userSaved = await user.save();
+      const userSaved =await user.save();
       return ReS(res, { success: "Registered successfully!", user: userSaved }, 200);
-    // }
+    
   } catch (error) {
     utils.handleError(res, error);
   }
-};
+ 
+}

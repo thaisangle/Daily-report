@@ -1,6 +1,6 @@
 const dotenv = require('dotenv');
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 var token_list = {};
 const utils = require('../../middlewares/authentication/until');
@@ -60,7 +60,6 @@ module.exports.login = async(req,res) => {
 module.exports.refreshToken =  async (req, res) => {
     // User gửi mã Refresh token kèm theo trong body
     const { refresh_token } = req.body;
-    
     // Kiểm tra Refresh token có được gửi kèm và mã này có tồn tại trên hệ thống hay không
     if ((refresh_token) && (refresh_token in token_list)) {
       try {
