@@ -43,14 +43,14 @@ module.exports.login = async(req,res) => {
                         res.json({response});
                     }
                     else{
-                        res.status(401).send("Password incorrect!")
+                        res.status(401).json({"error":"Password incorrect!"})
                     }
                 });
             }else{
-                res.status('404').send(new Error("Not Found Email!"));
+                res.status('404').json({"error":"Email Not Found!"});
             }
        } catch (error) {
-           res.send("Error : " + error)
+           res.send("error : " + error)
         }
     }
 /**
@@ -93,11 +93,11 @@ module.exports.refreshToken =  async (req, res) => {
  *  get user by token
  * 
  */
-module.exports.getUserById = async (req , res) =>{
+module.exports.get_user = async (req , res) =>{
   const token = req.header('Authorization').replace('Bearer ', '');
   jwt.verify(token, process.env.SESSION_TOKEN_SECRET, async (err, decoded) =>{
     if(err){
-      res.status(404).send('User Not Found!');
+      res.status(404).json({'error':'User Not Found!'});
     }
     const user=  await User.findOne({ _id: decoded._user.id});
     if(user){
@@ -105,15 +105,12 @@ module.exports.getUserById = async (req , res) =>{
         _id : user._id,
         name: user.name,
         email:user.email,
-        avatar:user.avatar
+        avatar:user.avatar,
+        createdAt:user.createdAt,
+        updatedAt:user.updatedAt,
       })
       res.status(200).json(_user);
     }
-    else{
-      res.status(404).send(json("error","User Not Found!"));
-    }
-
-
   });
   
 }

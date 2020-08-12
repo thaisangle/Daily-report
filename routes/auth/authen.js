@@ -6,7 +6,7 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 router.post('/login',controller.login);
 router.post('/refreshtoken',controller.refreshToken);
-router.post('/getuser',controller.getUserById);
+router.get('/getuser',controller.get_user);
 
 
 module.exports = router;

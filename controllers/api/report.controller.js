@@ -7,41 +7,61 @@ const until = require('../../helper/utils')
 const { request } = require('express');
 const isImage = require('is-image');
 const { findById, findOne } = require('../../models/question');
+const { body, validationResult } = require('express-validator');
+const question = require('../../models/question');
 /**
  * get create question 
  */
 exports.creater = async (req,res) =>{
-    // const error  = validatorReport(req,res);
-    // if(error){
-    //     // return utils.handleError(res, error);
-    // }else{
-        try {
-            var answer_url = null;
-            var answer_text = req.body.answer;
-            // if(isImage(req.body.answer)){
-            //     answer_text = null;
-            //     anser_url = req.body.answer;
-            // }else{
-            //     answer_text = req.body.answer;
-            //     anser_url = null;
-            // }
-            // const statu_report = parsetimereport.paserstatus();
-            const report = new Report({
-                userId :req.body.user_id,
-                questionId :req.body.request_id,
-                answerUrl : answer_url,
-                answerText : answer_text,
-                status : true,
-            });
+    // let datenow = new Date();
+        // let hours = datenow.getHours();
+        // console.log(hours)
+        // Finds the validation errors in this request and wraps them in an object with handy functions
+    try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }else{
+            let i = 0;
+            var user_id = req.body.user_id;
+            var list_answer = req.body.answer;
+            // get list_question in database
+            const list_question = await Question.find({});
+            if(list_question){
+                list_question.forEach(question => {
+                    // console.log(i);
+                    if(isImage(list_answer[i])){
+                        answer_text = null;
+                        answer_url = list_answer[i];
+                    }else{
+                        answer_text = list_answer[i];
+                        answer_url = null;
+                    }
+                    // console.log(question._id)
+                    // console.log(answer_url)
+                    // console.log(answer_text)
+                    // inser report in table Report 
+                    const report = new Report({
+                        userId :user_id,
+                        questionId :question._id,
+                        answerUrl : answer_url,
+                        answerText : answer_text,
+                        status : true,
+                    });
+                    // save report 
+                    report.save();
+                    i++;
+                });
+                return ReS(res, { success: "Created successfully!"}, 200);
+            }
+            res.status(202).json({"error":"List Question is Null"});
+        }  
+    } catch (error) {
+        until.handleError(res, error);
+    }
         
-             const reportSave = await report.save();
-            return ReS(res, { success: "Registered successfully!", user: reportSave }, 200);
-        } catch (error) {
-            until.handleError(res, error);
-        }
-        
-    // }
-} 
+}
+// } 
 // exports.getListReport = async(req,res) =>{
 //     // const listReport = Report.find({}).toArray();
 //     console.log("ss");

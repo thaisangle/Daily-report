@@ -10,7 +10,7 @@ const controller = require("../../controllers/api/answer.controller");
  * Register route
  */
 router.post(
-  "/register",
+  "/create",
   controller.create
 );
 

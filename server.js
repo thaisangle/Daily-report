@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const helmet = require("helmet");
 const path = require("path");
 const passport = require("passport");
+const expressValidator = require('express-validator');
 const cors = require("cors")
 const initMongo = require("./config/mongo")
 require('dotenv-safe').config()
@@ -46,6 +47,8 @@ app.use(
     extended: true,
   })
 );
+// validate request
+// app.use(expressValidator());
 
 // Init all other stuff
 app.use(cors());

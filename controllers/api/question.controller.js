@@ -34,8 +34,6 @@ module.exports.list_report = async (req,res)=>{
              res.status(200).send(list_report);
          }
     } catch (error) {
-        if(error){
-            res.status('200').send('Error:'+error);
-        }
+            res.status('500').json({'Error':error});
     }
 }
