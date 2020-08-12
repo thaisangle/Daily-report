@@ -8,12 +8,8 @@ const requireAuth = passport.authenticate("jwt", {
 const trimRequest = require("trim-request");
 const controller = require("../../controllers/api/setting.controller");
 
-/**
- * Register route
- */
-router.post(
-  "/register",
-  controller.create
-);
+router.post("/create", controller.create);
+router.post("/update/:id", controller.updateTimeReportById);
+router.get("/setting", controller.getAllSetting);
 
 module.exports = router;
