@@ -3,7 +3,6 @@ const Answer = require('../../models/answer')
 const { to, ReE, ReS } = require("../../services/util.service");
 const until = require('../../helper/utils');
 const { json } = require('express');
-const answer = require('../../models/answer');
 
 module.exports.create  = async (req,res)=>{
    try {

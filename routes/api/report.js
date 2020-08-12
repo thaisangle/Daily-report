@@ -5,7 +5,6 @@ const requireAuth = passport.authenticate("jwt", {
   session: false,
 });
 // const validate = require("../controllers/auth.validate");
-const middleware = require("../../middlewares/authentication/authorization")
 const trimRequest = require("trim-request");
 // const validate = require('../../middlewares/validator/report.validator')
 const controller = require("../../controllers/api/report.controller");
@@ -25,6 +24,6 @@ router.post(
   ],
   controller.create
 );
-// router.get("/getList",middleware,controller.getListReport)
+router.get("/get_list_report",controller.get_list_report)
 
 module.exports = router;
