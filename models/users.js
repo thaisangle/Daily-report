@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcryptjs')
 const validator = require('validator')
 const mongoosePaginate = require('mongoose-paginate-v2')
 
@@ -23,21 +23,8 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: true
     },
-    // roles for user
-    role: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Roles',
-      enum: ['user', 'admin']
-    },
-    phoneNumber: {
-      type: String
-    },
-    birthDay: {
-      type: Date
-    },
-    gender: {
+    avatar:{
       type: String,
-      enum: ['Male', 'Female']
     }
   },
   {
