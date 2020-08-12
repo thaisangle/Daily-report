@@ -1,6 +1,8 @@
 const Question = require('../../models/question')
+const Answer = require('../../models/answer')
 const { to, ReE, ReS } = require("../../services/util.service");
-const until = require('../../helper/utils')
+const utils = require('../../helper/utils')
+const mongoose = require("mongoose");
 
 const QUESTION_TEXT = "0";
 const QUESTION_OPTION = "1";
@@ -47,8 +49,9 @@ module.exports = {
           if (err) utils.handleError(res, error);
         });
 
-        ReS(res, { success: "Created!" }, 200);
       }
+      ReS(res, { success: "Created!" }, 200);
+
     } catch (error) {
       utils.handleError(res, error);
     }
