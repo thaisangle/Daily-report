@@ -23,7 +23,7 @@ router.post(
   // password must be at least 5 chars long
     body('answer').notEmpty(),
   ],
-  controller.creater
+  controller.create
 );
 // router.get("/getList",middleware,controller.getListReport)
 

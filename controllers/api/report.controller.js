@@ -2,23 +2,28 @@ const Question  = require('../../models/question');
 const Report = require('../../models/report');
 const { to, ReE, ReS } = require("../../services/util.service");
 const validatorReport = require('../../middlewares/validator/report.validator');
-const parsetimereport = require('../../helper/parse/report')
+const { body, validationResult } = require('express-validator');
+// helper
+const parsetimereport = require('../../helper/parse/time_report')
 const until = require('../../helper/utils')
 const { request } = require('express');
 const isImage = require('is-image');
+//model 
 const { findById, findOne } = require('../../models/question');
-const { body, validationResult } = require('express-validator');
 const question = require('../../models/question');
+const setting = require('../../models/setting');
+const { json } = require('body-parser');
 /**
  * get create question 
  */
-exports.creater = async (req,res) =>{
-    // let datenow = new Date();
-        // let hours = datenow.getHours();
-        // console.log(hours)
-        // Finds the validation errors in this request and wraps them in an object with handy functions
+exports.create = async (req,res) =>{
     try {
+        //Validate request
         const errors = validationResult(req);
+        //get time_report in table report
+        const time = await setting.findOne({"settingName":"Setting time_report"});
+        // get status from time_report
+        const status_report = await parsetimereport(time.settingValue.start,time.settingValue.end)
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
         }else{
@@ -37,16 +42,12 @@ exports.creater = async (req,res) =>{
                         answer_text = list_answer[i];
                         answer_url = null;
                     }
-                    // console.log(question._id)
-                    // console.log(answer_url)
-                    // console.log(answer_text)
-                    // inser report in table Report 
                     const report = new Report({
                         userId :user_id,
                         questionId :question._id,
                         answerUrl : answer_url,
                         answerText : answer_text,
-                        status : true,
+                        status : status_report,
                     });
                     // save report 
                     report.save();
