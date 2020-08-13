@@ -12,8 +12,8 @@ router.post("/create", controller.create);
 
 router.get("/get-list", controller.getAllQuestion);
 
-// router.delete("/:id", controller.deleteQuestion);
+router.delete("/:id", controller.deleteQuestion);
 
-// router.post("/:id", controller.updateQuestionById);
+router.post("/:id", controller.updateQuestionById);
 
 module.exports = router;

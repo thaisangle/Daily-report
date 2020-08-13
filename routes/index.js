@@ -35,9 +35,9 @@ router.use("/answer",authorization(),require("./api/answer"))
 /*
  * Setup routes for index
  */
-router.get("/", (req, res) => {
-  res.render("index");
-});
+// router.get("/", (req, res) => {
+//   res.render("index");
+// });
 
 /*
  * Handle 404 error
