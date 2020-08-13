@@ -1,6 +1,6 @@
 const dotenv = require('dotenv');
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt-nodejs');
 
 var token_list = {};
 const utils = require('../../middlewares/authentication/until');
