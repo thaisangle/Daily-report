@@ -9,7 +9,8 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "cross-env NODE_ENV=development nodemon -r esm server.js"
+    "dev": "cross-env NODE_ENV=development nodemon -r esm server.js",
+    "start": "node -r esm server.js"
   },
   "author": "Dung Dang",
   "license": "ISC",
