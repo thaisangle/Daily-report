@@ -10,6 +10,6 @@ const controller = require("../../controllers/api/setting.controller");
 
 router.post("/create", controller.create);
 router.post("/update/:id", controller.updateTimeReportById);
-router.get("/setting", controller.getAllSetting);
+router.get("/get-setting", controller.getAllSetting);
 
 module.exports = router;

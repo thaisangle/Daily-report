@@ -10,7 +10,7 @@ const controller = require("../../controllers/api/question.controller");
 
 router.post("/create", controller.create);
 
-router.get("/get-list-question", controller.getAllQuestion);
+router.get("/get-list", controller.getAllQuestion);
 
 router.delete("/:id", controller.deleteQuestion);
 
