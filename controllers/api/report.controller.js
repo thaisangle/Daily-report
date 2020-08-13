@@ -74,9 +74,9 @@ exports.get_list_report = async(req,res) =>{
               as: "user_report"
             }
        }])
-    list_question.forEach(element => {
-        console.log(element);
-    });
+    // list_question.forEach(element => {
+    //     console.log(element);
+    // });
     const list_report = await Report.find({createdAt:Date()});
     res.json(list_question);
 }
