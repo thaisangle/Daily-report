@@ -5,7 +5,7 @@ const ReportSchema = new mongoose.Schema(
   {
     userId: {
       type: Schema.Types.ObjectId,
-      ref: "Users",
+      ref: "User",
     },
     questionId: {
       type: Schema.Types.ObjectId,

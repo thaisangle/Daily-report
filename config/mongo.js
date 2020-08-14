@@ -7,7 +7,7 @@ module.exports = () => {
     const connect = () => {
         mongoose.Promise = global.Promise
         mongoose.connect(
-            "mongodb+srv://admin:C6MiAIkSYxg3T9cZ@std-daily-report.8pv7c.mongodb.net/stdio-daily-report?retryWrites=true&w=majority"
+            "mongodb+srv://admin:ABIuQyBaBW6yZbmb@std-daily-report.8pv7c.mongodb.net/stdio-daily-report?retryWrites=true&w=majority"
             ,
           {
             keepAlive: true,

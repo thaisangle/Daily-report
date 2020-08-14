@@ -11,9 +11,8 @@ const controller = require("../../controllers/api/setting.controller");
 /**
  * Register route
  */
-router.post(
-  "/register",
-  controller.create
-);
+router.post("/create", controller.create);
+router.post("/update/:id", controller.updateTimeReportById);
+router.get("/get-setting", controller.getAllSetting);
 
 module.exports = router;

@@ -1,14 +1,12 @@
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
-const requireAuth = passport.authenticate("jwt", {
-  session: false,
-});
+
 // const validate = require("../controllers/auth.validate");
-const trimRequest = require("trim-request");
+// const trimRequest = require("trim-request");
 // const validate = require('../../middlewares/validator/report.validator')
 const controller = require("../../controllers/api/report.controller");
-const validate = require('../../middlewares/validator/report.validator')
+// const validate = require('../../middlewares/validator/report.validator')
 const { body, validationResult } = require('express-validator');
 
 

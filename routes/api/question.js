@@ -11,9 +11,13 @@ const controller = require("../../controllers/api/question.controller");
 /**
  * Register route
  */
-router.post(
-  "/register",
-  controller.create
-);
-router.get("/list_question",controller.list_report)
+router.post("/create", controller.create);
+
+router.get("/get-list", controller.getAllQuestion);
+
+router.delete("/:id", controller.deleteQuestion);
+
+router.post("/:id", controller.updateQuestionById);
+
+router.get("/list-question",controller.getAllQuestion)
 module.exports = router;
