@@ -19,25 +19,25 @@ const { json } = require("body-parser");
  * get create question
  */
 exports.create = async (req,res) =>{
-    
-    // console.log(date_parse);
     try {
         // await Report.remove({});
         
         //check error Validate request
         const errors = validationResult(req);
-        //get time_report in table report
-        const time = await Setting.findOne({"settingName":"Setting time_report"});
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
         }else{
-            // set status from time_report
+            //get time_report in table setting
+            const time = await Setting.findOne({"settingName":"Setting time_report"});
+            // set status_report
             const status_report = await parsestatusreport(time.settingValue.start,time.settingValue.end)
             //set time_report
             const date_now = new Date();
             const date_parse = await parsetimereport(date_now).then((result)=>{
                 return result;
             })
+
+
             let i = 0;
             var user_id = req.body.user_id;
             var answer_text = null;
@@ -80,7 +80,15 @@ exports.create = async (req,res) =>{
     }
         
 }
+/**
+ * Check report
+ * @param {*} req 
+ * @param {true/false} res 
+ */
+// exports.check_report = async(req,res) =>{
+//     const list_report = Report.find({});
 
+// }
 /**
  * curl --location --request GET 'localhost:3000/report/get_list_report?selectedDate=1597324054' \
  * @param {date:1597331518791} req 

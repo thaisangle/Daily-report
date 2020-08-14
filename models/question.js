@@ -4,6 +4,9 @@ const Question = require("./question");
 const { Schema } = mongoose;
 const QuestionSchema = new mongoose.Schema(
   {
+    title:{
+      type: String,
+    },
     name: {
       type: String,
     },
