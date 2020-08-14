@@ -1,32 +1,43 @@
 const { to, ReE, ReS } = require("../../services/util.service");
 const validatorReport = require("../../middlewares/validator/report.validator");
-const { body, validationResult } = require("express-validator");
+const { body, validationResult, Result } = require("express-validator");
 // helper
+const parsestatusreport = require("../../helper/parse/status_report");
 const parsetimereport = require("../../helper/parse/time_report");
 const until = require("../../helper/utils");
 const { request } = require("express");
 const isImage = require("is-image");
 //model
 const { findById, findOne } = require("../../models/question");
-const setting = require("../../models/setting");
+// const Setting = require("../../models/setting");
+import Setting, { SettingTimeReportMoDel } from "../../models/setting";
 const Question = require("../../models/question");
 const Report = require("../../models/report");
+
 const { json } = require("body-parser");
 /**
  * get create question
  */
 exports.create = async (req,res) =>{
+    
+    // console.log(date_parse);
     try {
         // await Report.remove({});
+        
         //check error Validate request
         const errors = validationResult(req);
         //get time_report in table report
         const time = await Setting.findOne({"settingName":"Setting time_report"});
-        // get status from time_report
-        const status_report = await parsetimereport(time.settingValue.start,time.settingValue.end)
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
         }else{
+            // set status from time_report
+            const status_report = await parsestatusreport(time.settingValue.start,time.settingValue.end)
+            //set time_report
+            const date_now = new Date();
+            const date_parse = await parsetimereport(date_now).then((result)=>{
+                return result;
+            })
             let i = 0;
             var user_id = req.body.user_id;
             var answer_text = null;
@@ -39,7 +50,7 @@ exports.create = async (req,res) =>{
                 if(list_answer.length != list_question.length){
                    return res.status(500).json({"error":"Please Check answer! List answer not match list question..."});
                 }
-                list_question.forEach(question => {
+                list_question.map(question => {
                 if(isImage(list_answer[i])){
                     answer_text = null;
                     answer_url = list_answer[i];
@@ -53,6 +64,8 @@ exports.create = async (req,res) =>{
                     answerUrl : answer_url,
                     answerText : answer_text,
                     status : status_report,
+                    createdAt: date_parse,
+                    updatedAt: date_parse,
                 });
                 // save report in table
                 report.save();
@@ -111,7 +124,14 @@ exports.get_list_report = async (req, res) => {
     return question;
   });
 
-  const result = await Promise.all(fetchPromise);
+    const result = await Promise.all(fetchPromise);
 
-  res.status(202).json({ success: "OK", data: result });
+//   res.status(202).json({ success: "OK", data: result });
+    if(Array.isArray(result) && result.length === 0) {
+        const question = await Question.find({});
+        res.status(202).json({ success: "OK", data: question });
+    } else {
+        res.status(202).json({ success: "OK", data: result });
+    }
+
 };

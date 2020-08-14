@@ -1,25 +1,17 @@
-const Setting = require('../../models/setting')
-const { itemAlreadyExists } = require('../utils')
-
-module.exports =async (start,end)=> {
-    /**
-     * Parse status when add  Report 
-     * @param {int} start - time start
-     * @param {int} end - time end
-     */
-      //set time to UTC parse in UTC+7(vietnam);
-      const nows = new Date().getUTCHours();
-      //  handle hour   
-      const hours = nows + 7 >= 24? nows + 7 - 24:nows + 7;
-    //   console.log(hours);
-    //   console.log(start);
-    //   console.log(end);
-      const hour = await (hours)*3600;
-      const minute = await new Date().getMinutes()*60;
-      const second  = await new Date().getMilliseconds();
-      const now = hour + minute + second;
-      if(now >= start  && now <= end ){
-          return true;
-      }
-      return false;
-    }
+module.exports = async(date)=>{
+   //get date UTC string
+    var dateutc = date.toUTCString();
+   // get hour UTC     
+    var hour_utc  = new Date().getUTCHours() * 60 *60;
+   // get time UTC
+    var time_utc = Date.parse(dateutc);
+   // get hour NOW 
+    var hour_now = new Date().getHours() * 60 * 60;
+    // return time report
+    const time_report = time_utc/1000 - hour_utc + hour_now;
+    // console.log(time_report *1000);
+    
+    //return a new Promise
+     return (new Date(time_report * 1000)); 
+    
+}
