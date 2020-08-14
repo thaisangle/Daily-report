@@ -26,11 +26,11 @@ module.exports.login = async(req,res) => {
                     if(result){
                         //refresh after 15p
                         const access_token = jwt.sign({_user}, process.env.SESSION_TOKEN_SECRET, {
-                            expiresIn: 900
+                            expiresIn: 86400
                           });
                           // Tạo một mã token khác - Refresh token
                         const refresh_token = jwt.sign({_user}, process.env.REFRESH_TOKEN_SECRET, {
-                            expiresIn: 900
+                            expiresIn: 86400
                         });
                          // Lưu lại mã Refresh token, kèm thông tin của user để sau này sử dụng lại
                         token_list[refresh_token] = _user;
@@ -70,7 +70,7 @@ module.exports.refreshToken =  async (req, res) => {
         const _user = token_list[refresh_token];
         // Tạo mới mã token và trả lại cho user
         const access_token = jwt.sign({_user}, process.env.SESSION_TOKEN_SECRET, {
-            expiresIn: 900
+            expiresIn: 86400
           });
         const response = {
             access_token,
