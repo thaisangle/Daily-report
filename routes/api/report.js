@@ -23,5 +23,5 @@ router.post(
   controller.create
 );
 router.get("/get_list_report",controller.get_list_report)
-
+router.get("/check_report",controller.check_report);
 module.exports = router;

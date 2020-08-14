@@ -13,7 +13,7 @@ const authorization = require('../middlewares/authentication/authorization');
 router.use("/auth", require("./auth/authen"));
 
 //test dữ liệu
-router.use("/user", authorization(),require("./api/user"));
+router.use("/user",require("./api/user"));
 router.use("/setting",authorization(),require("./api/setting"))
 router.use("/report",authorization(),require("./api/report"))
 router.use("/question",authorization(),require("./api/question"))

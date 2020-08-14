@@ -28,7 +28,7 @@ exports.crearte = async (req, res, next) => {
         password: req.body.password,
         avatar: req.body.avatar,
       });
-      await emailer.emailEưxists(req.body.email);
+      await emailer.emailExists(req.body.email);
       const userSaved =await user.save();
       return ReS(res, { success: "Registered successfully!", user: userSaved }, 200);
     

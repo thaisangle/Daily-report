@@ -85,10 +85,13 @@ exports.create = async (req,res) =>{
  * @param {*} req 
  * @param {true/false} res 
  */
-// exports.check_report = async(req,res) =>{
-//     const list_report = Report.find({});
+exports.check_report = async(req,res) =>{
+    const date = new Date().setHours(0,0,0).valueOf();
+    console.log(new Date(date));
+    const list_report = await Report.find({createdAt:date});
+    res.json(list_report);
 
-// }
+}
 /**
  * curl --location --request GET 'localhost:3000/report/get_list_report?selectedDate=1597324054' \
  * @param {date:1597331518791} req 
