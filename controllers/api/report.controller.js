@@ -80,8 +80,6 @@ exports.get_list_report = async (req, res) => {
   netDate.setHours(0, 0, 0);
   netDate.setDate(netDate.getDate() + 1);
 
-  console.log(currentDate, netDate);
-
   const list_question = await Question.aggregate([
     {
       $lookup: {
@@ -110,5 +108,11 @@ exports.get_list_report = async (req, res) => {
 
   const result = await Promise.all(fetchPromise);
 
-  res.status(202).json({ success: "OK", data: result });
+  if(Array.isArray(result) && result.length === 0) {
+    const question = await Question.find({});
+    res.status(202).json({ success: "OK", data: question });
+  } else {
+    res.status(202).json({ success: "OK", data: result });
+  }
+
 };

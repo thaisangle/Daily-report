@@ -9,7 +9,7 @@ const { to, ReE, ReS } = require("../../services/util.service");
 const { body } = require("trim-request");
 const mongoose = require("mongoose");
 
-const SETTING_TIME_REPORT = "Setting default test";
+const SETTING_TIME_REPORT = "Setting time_report";
 
 /********************
  * Public functions *
@@ -80,7 +80,7 @@ module.exports = {
   },
   getAllSetting: async (req, res, next) => {
     try {
-      const setting = await Setting.find({});
+      const setting = await Setting.findOne({settingName: SETTING_TIME_REPORT});
       if (!setting) return ReE(res, { error: "Not found" }, 404);
 
       ReS(res, { data: setting }, 200);
