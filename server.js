@@ -29,9 +29,6 @@ require('dotenv-safe').config()
 //   }
 // }));
 app.use(cors())
- app.listen(80, function () {
-  console.log('CORS-enabled web server listening on port 80')
-})// End Setup
 
 // Setup express server port from ENV, default: 3000
 app.set("port", process.env.PORT || 3000);
