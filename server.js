@@ -10,6 +10,8 @@ const cors = require("cors")
 const initMongo = require("./config/mongo")
 require('dotenv-safe').config()
 
+
+
 //Setup COSR
 var allowedOrigins = ['http://localhost:3000',
                       'https://daily-report.vercel.app',
