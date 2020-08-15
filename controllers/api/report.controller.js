@@ -39,7 +39,8 @@ exports.create = async (req,res) =>{
             const date_parse = await parsetimereport(date_now).then((result)=>{
                 return result;
             })
-
+            // console.log(date_now);
+            // console.log(date_parse);
 
             let i = 0;
             var user_id = req.body.user_id;
@@ -148,7 +149,7 @@ exports.get_list_report = async (req, res) => {
     },
     {
       $match: {
-        reports:{"createdAt": { "$gte": new Date(parse_curren), "$lt":new Date(parse_net) }},
+        "report.createdAt":{"$gte": new Date(parse_curren), "$lt":new Date(parse_net) },
       },
     },
   ]);
