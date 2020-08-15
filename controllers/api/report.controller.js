@@ -88,7 +88,7 @@ exports.create = async (req,res) =>{
  */
 exports.check_report = async(req,res) =>{
     const date = new Date().setHours(0,0,0).valueOf();
-    console.log(new Date(date));
+    console.log(parsetimereport(new Date(date)));
     const list_report = await Report.find({createdAt:date});
     res.json(list_report);
 
