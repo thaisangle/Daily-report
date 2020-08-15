@@ -120,55 +120,58 @@ exports.delete_report = async(req,res) =>{
  * @param {*} res 
  */
 exports.get_list_report = async (req, res) => {
-  // example: 1597331518791
-
-  const { selectedDate } = req.query;
-  const currentDate = new Date(selectedDate*1);
-  currentDate.setHours(0, 0, 0);
-  const netDate = new Date(selectedDate*1);
-  netDate.setHours(0, 0, 0);
-  netDate.setDate(netDate.getDate() + 1);
-
-//   const parse_curren = await parsetimereport(currentDate);
-//   const parse_net = await parsetimereport(netDate);
-
-// //   console.log(currentDate, netDate);
-//   console.log(parse_curren, parse_net);
-
-  const list_question = await Question.aggregate([
-    {
-      $lookup: {
-        from: "reports",
-        localField: "_id",
-        foreignField: "questionId",
-        as: "user_report",
+    // example: 1597413043000
+  
+    const { selectedDate } = req.query;
+  
+    const serverTimeZoneOffset = (new Date()).getTimezoneOffset() / 60;
+    const changeOffset = serverTimeZoneOffset + 7; // VN timezone
+  
+    const currentDate = new Date(selectedDate * 1);
+    currentDate.setHours(currentDate.getHours() + changeOffset);
+    currentDate.setHours(0, 0, 0);
+  
+    const netDate = new Date(selectedDate * 1);
+    netDate.setHours(0, 0, 0);
+    netDate.setDate(netDate.getDate() + 1);
+  
+    const list_question = await Question.aggregate([
+      {
+        $lookup: {
+          from: "reports",
+          let: { questionID: "$_id" },
+          pipeline: [
+            {
+              $match: {
+                $expr:
+                {
+                  $and:
+                    [
+                      { $eq: ["$questionId", "$$questionID"] },
+                      { $gte: ["$createdAt", currentDate] },
+                      { $lt: ["$createdAt", netDate] }
+                    ]
+                }
+              },
+            },
+            { $project: { questionID: 0, _id: 0 } }
+          ],
+          as: "user_report",
+        },
       },
-    },
-    {
-      $match: {
-        "user_report.createdAt":{$gte: currentDate, $lt:netDate },
-      },
-    },
-  ]);
-
-  const fetchPromise = list_question.map(async (question) => {
-    const promises = question.user_report.map(async (report) => {
-      var opts = [{ path: "userId", select: "name avatar" }];
-      return Report.populate(report, opts);
+    ]);
+  
+    const fetchPromise = list_question.map(async (question) => {
+      const promises = question.user_report.map(async (report) => {
+        var opts = [{ path: "userId", select: "name avatar" }];
+        return Report.populate(report, opts);
+      });
+  
+      question.user_report = await Promise.all(promises);
+      return question;
     });
-
-    question.user_report = await Promise.all(promises);
-    return question;
-  });
-
+  
     const result = await Promise.all(fetchPromise);
-
-//   res.status(202).json({ success: "OK", data: result });
-    if(Array.isArray(result) && result.length === 0) {
-        const question = await Question.find({});
-        res.status(202).json({ success: "OK", data: question });
-    } else {
-        res.status(202).json({ success: "OK", data: result });
-    }
-
-};
+  
+    res.status(202).json({ success: "OK", data: result });
+  };
