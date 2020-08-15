@@ -18,67 +18,67 @@ const { json } = require("body-parser");
 /**
  * get create question
  */
-exports.create = async (req,res) =>{
-    try {
-        // await Report.remove({});
-        
-        //check error Validate request
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
-        }else{
-            //get time_report in table setting
-            const time = await Setting.findOne({"settingName":"Setting time_report"});
-            // set status_report
-            const status_report = await parsestatusreport(time.settingValue.start,time.settingValue.end)
-            //set time_report
-            const date_now = new Date();
-            const date_parse = await parsetimereport(date_now).then((result)=>{
-                return result;
-            })
+exports.create = async (req, res) => {
+  try {
+    // await Report.remove({});
+
+    //check error Validate request
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    } else {
+      //get time_report in table setting
+      const time = await Setting.findOne({ "settingName": "Setting time_report" });
+      // set status_report
+      const status_report = await parsestatusreport(time.settingValue.start, time.settingValue.end)
+      //set time_report
+      const date_now = new Date();
+      const date_parse = await parsetimereport(date_now).then((result) => {
+        return result;
+      })
 
 
-            let i = 0;
-            var user_id = req.body.user_id;
-            var answer_text = null;
-            var answer_url  = null;
+      let i = 0;
+      var user_id = req.body.user_id;
+      var answer_text = null;
+      var answer_url = null;
 
-            // get list_question in database
-            const list_answer = req.body.answer;
-            const list_question = await Question.find({});
-            if(list_question ){
-                if(list_answer.length != list_question.length){
-                   return res.status(500).json({"error":"Please Check answer! List answer not match list question..."});
-                }
-                list_question.map(question => {
-                if(isImage(list_answer[i])){
-                    answer_text = null;
-                    answer_url = list_answer[i];
-                }else{
-                    answer_text = list_answer[i];
-                    answer_url = null;
-                }
-                const report = new Report({
-                    userId :user_id,
-                    questionId :question._id,
-                    answerUrl : answer_url,
-                    answerText : answer_text,
-                    status : status_report,
-                    createdAt: date_parse,
-                    updatedAt: date_parse,
-                });
-                // save report in table
-                report.save();
-                i++;
-            });
-            return ReS(res, { success: "Created successfully!"}, 200);
-            }
-            return res.status(501).json({"error":"List Question is Null"});
-        }  
-    } catch (error) {
-        until.handleError(res, error);
+      // get list_question in database
+      const list_answer = req.body.answer;
+      const list_question = await Question.find({});
+      if (list_question) {
+        if (list_answer.length != list_question.length) {
+          return res.status(500).json({ "error": "Please Check answer! List answer not match list question..." });
+        }
+        list_question.map(question => {
+          if (isImage(list_answer[i])) {
+            answer_text = null;
+            answer_url = list_answer[i];
+          } else {
+            answer_text = list_answer[i];
+            answer_url = null;
+          }
+          const report = new Report({
+            userId: user_id,
+            questionId: question._id,
+            answerUrl: answer_url,
+            answerText: answer_text,
+            status: status_report,
+            createdAt: date_parse,
+            updatedAt: date_parse,
+          });
+          // save report in table
+          report.save();
+          i++;
+        });
+        return ReS(res, { success: "Created successfully!" }, 200);
+      }
+      return res.status(501).json({ "error": "List Question is Null" });
     }
-        
+  } catch (error) {
+    until.handleError(res, error);
+  }
+
 }
 /**
  * Check report
@@ -95,35 +95,43 @@ exports.create = async (req,res) =>{
  * @param {*} res 
  */
 exports.get_list_report = async (req, res) => {
-  // example: 1597331518791
+  // example: 1597413043000
 
   const { selectedDate } = req.query;
-  const currentDate = new Date(selectedDate*1);
+
+  const serverTimeZoneOffset = (new Date()).getTimezoneOffset() / 60;
+  const changeOffset = serverTimeZoneOffset + 7; // VN timezone
+
+  const currentDate = new Date(selectedDate * 1);
+  currentDate.setHours(currentDate.getHours() + changeOffset);
   currentDate.setHours(0, 0, 0);
-  const netDate = new Date(selectedDate*1);
+
+  const netDate = new Date(selectedDate * 1);
   netDate.setHours(0, 0, 0);
   netDate.setDate(netDate.getDate() + 1);
-
-  const date_current = await parsetimereport(currentDate).then((result)=>{
-    return result;
-})
-  const date_net = await parsetimereport(netDate).then((result)=>{
-  return result;
-})
-  // console.log(currentDate, netDate);
 
   const list_question = await Question.aggregate([
     {
       $lookup: {
         from: "reports",
-        localField: "_id",
-        foreignField: "questionId",
+        let: { questionID: "$_id" },
+        pipeline: [
+          {
+            $match: {
+              $expr:
+              {
+                $and:
+                  [
+                    { $eq: ["$questionId", "$$questionID"] },
+                    { $gte: ["$createdAt", currentDate] },
+                    { $lt: ["$createdAt", netDate] }
+                  ]
+              }
+            },
+          },
+          { $project: { questionID: 0, _id: 0 } }
+        ],
         as: "user_report",
-      },
-    },
-    {
-      $match: {
-        "user_report.createdAt": { $gte: date_current, $lt: date_net },
       },
     },
   ]);
@@ -138,14 +146,14 @@ exports.get_list_report = async (req, res) => {
     return question;
   });
 
-    const result = await Promise.all(fetchPromise);
+  const result = await Promise.all(fetchPromise);
 
-//   res.status(202).json({ success: "OK", data: result });
-    if(Array.isArray(result) && result.length === 0) {
-        const question = await Question.find({});
-        res.status(202).json({ success: "OK", data: question });
-    } else {
-        res.status(202).json({ success: "OK", data: result });
-    }
+  res.status(202).json({ success: "OK", data: result });
+  // if(Array.isArray(result) && result.length === 0) {
+  //     const question = await Question.find({});
+  //     res.status(202).json({ success: "OK", data: question });
+  // } else {
+  //     res.status(202).json({ success: "OK", data: result });
+  // }
 
 };
