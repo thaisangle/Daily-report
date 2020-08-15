@@ -30,8 +30,9 @@ require('dotenv-safe').config()
 // }));
 // app.use(cors())
 var corsOptions = {
-  origin: "*",
-  methods: ['GET','POST','PATCH','DELETE','PUT'],
+  origin:"*",
+  methods:"GET,HEAD,PUT,PATCH,POST,DELETE",
+  preflightContinue: false,
   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 app.use(cors(corsOptions))
