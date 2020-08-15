@@ -5,7 +5,7 @@ const bodyParser = require("body-parser");
 const helmet = require("helmet");
 const path = require("path");
 const passport = require("passport");
-const expressValidator = require('express-validator');
+// const expressValidator = require('express-validator');
 const cors = require("cors")
 const initMongo = require("./config/mongo")
 require('dotenv-safe').config()
@@ -29,7 +29,9 @@ require('dotenv-safe').config()
 //   }
 // }));
 app.use(cors())
-// End Setup
+ app.listen(80, function () {
+  console.log('CORS-enabled web server listening on port 80')
+})// End Setup
 
 // Setup express server port from ENV, default: 3000
 app.set("port", process.env.PORT || 3000);
