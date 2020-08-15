@@ -5,6 +5,8 @@ const { body, validationResult, Result } = require("express-validator");
 const parsestatusreport = require("../../helper/parse/status_report");
 const parsetimereport = require("../../helper/parse/time_report");
 const until = require("../../helper/utils");
+const check_report = require("../../helper/check/check_report")
+
 const { request, response } = require("express");
 const isImage = require("is-image");
 //model
@@ -65,8 +67,8 @@ exports.create = async (req,res) =>{
                     answerUrl : answer_url,
                     answerText : answer_text,
                     status : status_report,
-                    createdAt: new Date(),
-                    updatedAt: new Date(),
+                    createdAt: date_parse,
+                    updatedAt: date_parse,
                 });
                 // save report in table
                 report.save();
@@ -87,10 +89,14 @@ exports.create = async (req,res) =>{
  * @param {true/false} res 
  */
 exports.check_report = async(req,res) =>{
-    const date = new Date().setHours(0,0,0).valueOf();
-    console.log(parsetimereport(new Date(date)));
-    const list_report = await Report.find({createdAt:date});
-    res.json(list_report);
+    try {
+        const user_id = req.body.user_id;
+        const check = await check_report.check_report(user_id);
+        return res.status(200).json({check})
+
+    } catch (error) {
+        until.handleError(res, error);
+    }
 
 }
 /**
@@ -128,7 +134,7 @@ exports.get_list_report = async (req, res) => {
   const parse_curren = await parsetimereport(currentDate);
   const parse_net = await parsetimereport(netDate);
 
-  console.log(currentDate, netDate);
+//   console.log(currentDate, netDate);
   console.log(parse_curren, parse_net);
 
   const list_question = await Question.aggregate([
@@ -142,7 +148,7 @@ exports.get_list_report = async (req, res) => {
     },
     {
       $match: {
-        "user_report.createdAt": { $gte: new Date(currentDate), $lt:new Date(netDate) },
+        reports:{"createdAt": { "$gte": new Date(parse_curren), "$lt":new Date(parse_net) }},
       },
     },
   ]);
