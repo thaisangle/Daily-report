@@ -104,6 +104,12 @@ exports.get_list_report = async (req, res) => {
   netDate.setHours(0, 0, 0);
   netDate.setDate(netDate.getDate() + 1);
 
+  const date_current = await parsetimereport(currentDate).then((result)=>{
+    return result;
+})
+  const date_net = await parsetimereport(netDate).then((result)=>{
+  return result;
+})
   // console.log(currentDate, netDate);
 
   const list_question = await Question.aggregate([
@@ -117,7 +123,7 @@ exports.get_list_report = async (req, res) => {
     },
     {
       $match: {
-        "user_report.createdAt": { $gte: currentDate, $lt: netDate },
+        "user_report.createdAt": { $gte: date_current, $lt: date_net },
       },
     },
   ]);
