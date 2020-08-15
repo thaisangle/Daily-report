@@ -29,6 +29,8 @@ require('dotenv-safe').config()
 //   }
 // }));
 app.use(cors())
+app.options('*', cors()) // include before other routes
+
 
 // Setup express server port from ENV, default: 3000
 app.set("port", process.env.PORT || 3000);
