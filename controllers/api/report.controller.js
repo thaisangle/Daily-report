@@ -124,17 +124,16 @@ exports.get_list_report = async (req, res) => {
 
   const { selectedDate } = req.query;
   const currentDate = new Date(selectedDate*1);
-
-  currentDate.setHours(0, 0, 0, 0);
+  currentDate.setHours(0, 0, 0);
   const netDate = new Date(selectedDate*1);
-  netDate.setHours(0, 0, 0, 0 );
+  netDate.setHours(0, 0, 0);
   netDate.setDate(netDate.getDate() + 1);
 
-  const parse_curren = await parsetimereport(currentDate);
-  const parse_net = await parsetimereport(netDate);
+//   const parse_curren = await parsetimereport(currentDate);
+//   const parse_net = await parsetimereport(netDate);
 
-//   console.log(currentDate, netDate);
-  console.log(parse_curren, parse_net);
+// //   console.log(currentDate, netDate);
+//   console.log(parse_curren, parse_net);
 
   const list_question = await Question.aggregate([
     {
