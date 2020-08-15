@@ -24,4 +24,9 @@ router.post(
 );
 router.get("/get_list_report",controller.get_list_report)
 router.get("/check_report",controller.check_report);
+router.post("/delete_report",
+  [
+    body('user_id').notEmpty(),
+  ]
+  ,controller.delete_report);
 module.exports = router;
