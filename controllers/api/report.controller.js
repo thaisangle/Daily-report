@@ -68,8 +68,6 @@ exports.create = async (req,res) =>{
                     answerUrl : answer_url,
                     answerText : answer_text,
                     status : status_report,
-                    createdAt: new Date().setDate(new Date().getDate() - 2),
-                    updatedAt: new Date().setDate(new Date().getDate() - 2),
                 });
                 // save report in table
                 report.save();
