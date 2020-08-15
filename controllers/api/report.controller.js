@@ -31,14 +31,14 @@ exports.create = async (req,res) =>{
             return res.status(400).json({ errors: errors.array() });
         }else{
             //get time_report in table setting
-            const time = await Setting.findOne({"settingName":"Setting time_report"});
+                 const time = await Setting.findOne({"settingName":"Setting time_report"});
             // set status_report
-            const status_report = await parsestatusreport(time.settingValue.start,time.settingValue.end)
+                 const status_report = await parsestatusreport(time.settingValue.start,time.settingValue.end)
             //set time_report
-            const date_now = new Date();
-            const date_parse = await parsetimereport(date_now).then((result)=>{
-                return result;
-            })
+                // const date_now = new Date();
+                // const date_parse = await parsetimereport(date_now).then((result)=>{
+                //     return result;
+                // })
             // console.log(date_now);
             // console.log(date_parse);
 
@@ -68,8 +68,8 @@ exports.create = async (req,res) =>{
                     answerUrl : answer_url,
                     answerText : answer_text,
                     status : status_report,
-                    createdAt: date_parse,
-                    updatedAt: date_parse,
+                    createdAt: new Date().setDate(new Date().getDate() - 2),
+                    updatedAt: new Date().setDate(new Date().getDate() - 2),
                 });
                 // save report in table
                 report.save();
@@ -149,7 +149,7 @@ exports.get_list_report = async (req, res) => {
     },
     {
       $match: {
-        "report.createdAt":{"$gte": new Date(parse_curren), "$lt":new Date(parse_net) },
+        "user_report.createdAt":{$gte: currentDate, $lt:netDate },
       },
     },
   ]);
