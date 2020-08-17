@@ -10,8 +10,8 @@ module.exports ={
         const date_next = await parsetimereport(new Date(date))
         date_next.setDate(date_search.getDate()+1);
 
-        // console.log(new Date(date_search));
-        // console.log(new Date(date_next));
+        console.log(new Date(date_search));
+        console.log(new Date(date_next));
 
         const list_report = await Report.find({
             "userId":user_id,
