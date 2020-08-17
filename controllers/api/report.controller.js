@@ -90,6 +90,9 @@ exports.create = async (req,res) =>{
 exports.check_report = async(req,res) =>{
     try {
         const user_id = req.body.user_id;
+        if(!user_id){
+          res.status(404).json({'error':'User not found!'})
+        }
         const check = await check_report.check_report(user_id);
         return res.status(200).json({check})
 
