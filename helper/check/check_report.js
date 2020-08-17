@@ -5,10 +5,16 @@ const Report = require("../../models/report");
  */
 module.exports ={
    async check_report(user_id){ 
-        const date = new Date().setHours(0,0,0,0).valueOf();
-        const date_search = await parsetimereport(new Date(date))
-        const date_next = await parsetimereport(new Date(date))
-        date_next.setDate(date_search.getDate()+1);
+        const date = new Date().valueOf();
+        const date1 =  await parsetimereport(new Date(date))
+        const date2 = await parsetimereport(new Date(date))
+        
+
+        const date_search = date1.setUTCHours(0,0,0,0);
+        date2.setUTCDate(date1.getUTCDate()+1);
+        const date_next = date2.setUTCHours(0,0,0,0);
+        
+        
 
         console.log(new Date(date_search));
         console.log(new Date(date_next));
