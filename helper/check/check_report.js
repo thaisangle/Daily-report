@@ -16,8 +16,8 @@ module.exports ={
         
         
 
-        console.log(new Date(date_search));
-        console.log(new Date(date_next));
+        // console.log(new Date(date_search));
+        // console.log(new Date(date_next));
 
         const list_report = await Report.find({
             "userId":user_id,

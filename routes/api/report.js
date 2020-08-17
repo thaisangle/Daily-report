@@ -23,7 +23,7 @@ router.post(
   controller.create
 );
 router.get("/get_list_report",controller.get_list_report)
-router.post("/check_report",controller.check_report);
+router.get("/check_report/:id",controller.check_report);
 router.post("/delete_report",
   [
     body('user_id').notEmpty(),

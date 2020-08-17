@@ -91,13 +91,14 @@ exports.create = async (req,res) =>{
 exports.check_report = async(req,res) =>{
     try {
         var user;
-        const user_id = req.body.user_id; 
+        const user_id = req.params.id; 
+        // console.log(user_id);
         try {
            user = await User.findOne({_id:user_id});
         } catch (error) {
           res.status(404).json({'error':'User not found!'})
         }
-        console.log(user);
+        // console.log(user);
         if(!user){
           return res.status(404).json({'error':'User not found!'})
         }
