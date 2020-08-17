@@ -9,7 +9,7 @@ module.exports ={
         const date_search = await parsetimereport(new Date(date))
         const date_next = await parsetimereport(new Date(date))
         date_next.setDate(date_search.getDate()+1);
-
+        console.log(date_search,date_next);
         // console.log(new Date(date_search));
         // console.log(new Date(date_next));
 
