@@ -30,18 +30,18 @@ require('dotenv-safe').config()
 //     return callback(null, true);
 //   }
 // }));
-// app.use(cors())
-// var corsOptions = {
-//   origin:"*",
-//   methods:"GET,HEAD,PUT,PATCH,POST,DELETE",
-//   preflightContinue: false,
-//   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
-// };
-// app.use(cors(corsOptions))
-// // app.options('*', cors()) // include before other routes
+app.use(cors())
+var corsOptions = {
+  origin:"*",
+  methods:"GET,HEAD,PUT,PATCH,POST,DELETE",
+  preflightContinue: false,
+  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
+app.use(cors(corsOptions))
+// app.options('*', cors()) // include before other routes
 app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.setHeader("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
+  res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
 
