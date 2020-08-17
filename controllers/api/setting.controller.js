@@ -73,13 +73,13 @@ module.exports = {
             if (err) utils.handleError(res, error);
 
             const settingSaved = await Setting.findOne({ _id: id });
-            ReS(res, { data: settingSaved }, 200);
+            return ReS(res, { data: settingSaved }, 200);
           } catch (error) {
              utils.handleError(res, error);
           }
         }
       );
-      res.status(200).send('success!');
+      // res.status(200).send('success!');
     } catch (error) {
       utils.handleError(res, error);
     }
