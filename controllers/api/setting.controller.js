@@ -69,12 +69,17 @@ module.exports = {
         },
         { upsert: true },
         async (err) => {
-          if (err) utils.handleError(res, error);
+          try {
+            if (err) utils.handleError(res, error);
 
-          const settingSaved = await Setting.findOne({ _id: id });
-          ReS(res, { data: settingSaved }, 200);
+            const settingSaved = await Setting.findOne({ _id: id });
+            ReS(res, { data: settingSaved }, 200);
+          } catch (error) {
+             utils.handleError(res, error);
+          }
         }
       );
+      res.status(200).send('success!');
     } catch (error) {
       utils.handleError(res, error);
     }
