@@ -20,6 +20,9 @@ const ReportSchema = new mongoose.Schema(
     status: {
       type: Boolean,
     },
+    reportState: {
+      type: String,
+    },
   },
   {
     versionKey: false,
