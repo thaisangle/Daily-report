@@ -11,7 +11,7 @@ module.exports = ()=>{
             const tk = token.replace('Bearer ', '');
             jwt.verify(tk, process.env.SESSION_TOKEN_SECRET, async (err, decoded) =>{
                 if(err){
-                  return res.status(404).json({'error':'Acess denided!'});
+                  return res.status(401).json({'error':'Acess denided!'});
                 }
                 next();
             })

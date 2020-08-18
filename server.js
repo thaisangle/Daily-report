@@ -30,7 +30,7 @@ require('dotenv-safe').config()
 //     return callback(null, true);
 //   }
 // }));
-// app.use(cors())
+app.use(cors())
 var corsOptions = {
   origin:"*",
   methods:"GET,HEAD,PUT,PATCH,POST,DELETE",
@@ -39,6 +39,11 @@ var corsOptions = {
 };
 app.use(cors(corsOptions))
 // app.options('*', cors()) // include before other routes
+app.use(function(req, res, next) {
+  res.setHeader("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
+  res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 
 // Setup express server port from ENV, default: 3000
 app.set("port", process.env.PORT || 3000);

@@ -1,8 +1,10 @@
 module.exports = async(date)=>{
+   // console.log(date);
    //get date UTC string
     var dateutc = date.toUTCString();
+   // console.log(dateutc);
    // get hour UTC     
-    var hour_utc  = new Date().getUTCHours();
+    var hour_utc  = date.getUTCHours();
    // get time UTC
     var time_utc = Date.parse(dateutc);
    //  var time_utc = 1597535685000;

@@ -11,6 +11,7 @@ const { request, response } = require("express");
 const isImage = require("is-image");
 //model
 const { findById, findOne } = require("../../models/question");
+const User = require('../../models/users')
 // const Setting = require("../../models/setting");
 import Setting, { SettingTimeReportMoDel } from "../../models/setting";
 import report from "../../models/report";
@@ -100,15 +101,28 @@ exports.create = async (req, res) => {
  * @param {*} req
  * @param {true/false} res
  */
-exports.check_report = async (req, res) => {
-  try {
-    const user_id = req.body.user_id;
-    const check = await check_report.check_report(user_id);
-    return res.status(200).json({ check });
-  } catch (error) {
-    until.handleError(res, error);
-  }
-};
+exports.check_report = async(req,res) =>{
+    try {
+        var user;
+        const user_id = req.params.id; 
+        // console.log(user_id);
+        try {
+           user = await User.findOne({_id:user_id});
+        } catch (error) {
+          res.status(404).json({'error':'User not found!'})
+        }
+        // console.log(user);
+        if(!user){
+          return res.status(404).json({'error':'User not found!'})
+        }
+        const check = await check_report.check_report(user_id);
+        return res.status(200).json({check})
+
+    } catch (error) {
+        until.handleError(res, error);
+    }
+
+}
 /**
  * DELETE REPORT BY USER_ID
  * @param {USER_ID} req
